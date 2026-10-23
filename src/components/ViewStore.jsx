@@ -9,7 +9,15 @@ import copy_img from "../images/copy.png";
 import edit_img from "../images/edit.png";
 import delete_img from "../images/delete.png";
 
-const ViewStore = ({ passwordArray, setpasswordArray, form, setform }) => {
+import { deletePassword as deletePasswordReq } from "../api/passwords";
+
+const ViewStore = ({
+  passwordArray,
+  setpasswordArray,
+  form,
+  setform,
+  seteditingId,
+}) => {
   const [visiblePasswordIds, setvisiblePasswordIds] = useState([]);
   const navigate = useNavigate();
 
@@ -21,38 +29,40 @@ const ViewStore = ({ passwordArray, setpasswordArray, form, setform }) => {
     );
   };
 
-  const deletePassword = (e, id) => {
+  const deletePassword = async (e, id) => {
     console.log(`Deleting password of ID : ${id}`);
     e.preventDefault();
-    let cfm = confirm("Delete this password ?");
-    if (cfm) {
-      const updatedPasswords = passwordArray.filter((item) => item.id !== id);
-      setpasswordArray(updatedPasswords);
 
-      localStorage.setItem("passwords", JSON.stringify(updatedPasswords));
+    let cfm = confirm("Delete this password ?");
+    if (!cfm) return;
+
+    try {
+      await deletePasswordReq(id);
+      setpasswordArray((previous) =>
+        previous.filter((item) => item._id !== id),
+      );
+      toast.success("Password deleted successfully!");
+    } catch (error) {
+      console.log("Unable to deete password : ", error);
+      toast.error(error.message || "Unable to delete password");
     }
-    toast("Password deleted successfully!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
   };
 
   const editPassword = (e, id) => {
     console.log(`Editing password of ID : ${id}`);
     e.preventDefault();
 
-    setform(passwordArray.filter((item) => item.id === id)[0]);
-    const updatedPasswords = passwordArray.filter((item) => item.id !== id);
+    const selectedPassword = passwordArray.find((item) => item._id === id);
+    if (!selectedPassword) return;
 
+    setform({
+      site: selectedPassword.site,
+      username: selectedPassword.username,
+      password: selectedPassword.password,
+    });
+
+    seteditingId(selectedPassword._id);
     navigate("/");
-    setpasswordArray(updatedPasswords);
   };
 
   const copyText = (text) => {
@@ -258,17 +268,17 @@ const ViewStore = ({ passwordArray, setpasswordArray, form, setform }) => {
               <div className="grid gap-3 md:grid-cols-2">
                 {passwordArray.map((item) => {
                   const isPasswordVisible = visiblePasswordIds.includes(
-                    item.id,
+                    item._id,
                   );
                   const colorIdx =
-                    [...item.id].reduce(
+                    [...item._id].reduce(
                       (sum, char) => sum + char.charCodeAt(0),
                       0,
                     ) % cardColors.length;
 
                   return (
                     <article
-                      key={item.id}
+                      key={item._id}
                       className={`group rounded-2xl border p-4 transition duration-200 hover:brightness-110 sm:p-5 ${cardColors[colorIdx]}`}
                     >
                       <div className="flex min-w-0 items-center gap-3">
@@ -344,7 +354,7 @@ const ViewStore = ({ passwordArray, setpasswordArray, form, setform }) => {
                             </p>
                             <button
                               type="button"
-                              onClick={() => toggleSavedPassword(item.id)}
+                              onClick={() => toggleSavedPassword(item._id)}
                               aria-label={
                                 isPasswordVisible
                                   ? `Hide password for ${item.site}`
@@ -383,7 +393,7 @@ const ViewStore = ({ passwordArray, setpasswordArray, form, setform }) => {
                       <div className="mt-4 flex justify-end gap-2 border-t border-white/[0.07] pt-3">
                         <button
                           type="button"
-                          onClick={(e) => editPassword(e, item.id)}
+                          onClick={(e) => editPassword(e, item._id)}
                           aria-label={`Edit password for ${item.site}`}
                           className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-400 transition hover:bg-white/6 hover:text-white"
                         >
@@ -396,7 +406,7 @@ const ViewStore = ({ passwordArray, setpasswordArray, form, setform }) => {
                         </button>
                         <button
                           type="button"
-                          onClick={(e) => deletePassword(e, item.id)}
+                          onClick={(e) => deletePassword(e, item._id)}
                           aria-label={`Delete password for ${item.site}`}
                           className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-400 transition hover:bg-rose-400/10 hover:text-rose-200"
                         >

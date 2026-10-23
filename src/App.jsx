@@ -10,19 +10,33 @@ import ViewStore from "./components/ViewStore";
 import Settings from "./components/Settings";
 import Profile from "./components/Profile";
 
+import { getPasswords } from "./api/passwords";
+// import { set } from "mongoose";
+
 function App() {
   const [passwordArray, setpasswordArray] = useState([]);
 
-  useEffect(() => {
-    try {
-      const passwords = localStorage.getItem("passwords");
+  const [loadError, setloadError] = useState("");
+  const [editingId, seteditingId] = useState(null);
 
-      if (passwords) {
-        setpasswordArray(JSON.parse(passwords));
-      }
-    } catch (error) {
-      console.error("Unable to load saved passwords:", error);
-    }
+  useEffect(() => {
+    let isMounted = true;
+    getPasswords()
+      .then((passwords) => {
+        if (isMounted) {
+          setpasswordArray(passwords);
+          setloadError("");
+        }
+      })
+      .catch((err) => {
+        console.error("Unable to load saved passwords:", err);
+        if (isMounted) {
+          setloadError(err.message);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const [form, setform] = useState({
@@ -35,6 +49,9 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <main className="container">
+        {loadError && (
+          <p role="alert">Unable to load saved passwords: {loadError}</p>
+        )}
         <Routes>
           <Route
             path="/"
@@ -44,6 +61,8 @@ function App() {
                 setpasswordArray={setpasswordArray}
                 form={form}
                 setform={setform}
+                editingId= {editingId}
+                seteditingId= {seteditingId}
               />
             }
           />
@@ -55,6 +74,7 @@ function App() {
                 setpasswordArray={setpasswordArray}
                 form={form}
                 setform={setform}
+                seteditingId= {seteditingId}
               />
             }
           />

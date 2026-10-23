@@ -3,13 +3,22 @@ import { useRef, useState, useEffect } from "react";
 import React from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
 
 import saveIcon from "../images/save-icon.png";
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
 
-const Manager = ({ passwordArray, setpasswordArray, form, setform }) => {
+import { createPassword, getPasswords, updatePassword } from "../api/passwords";
+
+const Manager = ({
+  passwordArray,
+  setpasswordArray,
+  form,
+  setform,
+  editingId,
+  seteditingId,
+}) => {
   const ref = useRef(null);
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -18,33 +27,37 @@ const Manager = ({ passwordArray, setpasswordArray, form, setform }) => {
     setPasswordVisible((previous) => !previous);
   };
 
-  const savePassword = (e) => {
+  const savePassword = async (e) => {
     e.preventDefault();
+    const wasEditing = Boolean(editingId);
 
-    const updatedPasswords = [...passwordArray, { ...form, id: uuid() }];
+    try {
+      if (wasEditing) {
+        await updatePassword(editingId, form);
+      } else {
+        await createPassword(form);
+      }
+      const passwords = await getPasswords();
+      setpasswordArray(passwords);
+      setform({ site: "", username: "", password: "" });
+      seteditingId(null);
+      setPasswordVisible(false);
 
-    setpasswordArray(updatedPasswords);
-    localStorage.setItem("passwords", JSON.stringify(updatedPasswords));
-
-    setform({
-      site: "",
-      username: "",
-      password: "",
-    });
-
-    toast("Password saved successfully!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
-
-    setPasswordVisible(false);
+      toast(
+        wasEditing
+          ? "Password updated successfully!"
+          : "Password saved successfully!",
+        {
+          position: "top-right",
+          autoClose: 5000,
+          theme: "light",
+          transition: Bounce,
+        },
+      );
+    } catch (error) {
+      console.error("Unable to save password:", error);
+      toast.error(error.message || "Unable to save password");
+    }
   };
 
   const handleChange = (e) => {
@@ -229,7 +242,7 @@ const Manager = ({ passwordArray, setpasswordArray, form, setform }) => {
                     alt=""
                     className="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
                   />
-                  Save
+                  {editingId ? "Update" : "Save"}
                 </button>
               </div>
             </form>
