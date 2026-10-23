@@ -10,14 +10,14 @@ const Footer = () => {
 
       <div className="relative mx-auto flex max-w-5xl flex-col items-center justify-center gap-2 px-4 py-4 sm:flex-row sm:justify-between sm:gap-4 sm:px-6">
         <div className="cursor-pointer text-xl font-extrabold tracking-tight transition-transform duration-300 hover:scale-105">
-          <span className="text-slate-300">&lt;</span>
-          <span className="bg-linear-to-r from-orange-300 to-pink-400 bg-clip-text text-transparent">
+          <span className="text-slate-200">&lt;</span>
+          <span className="bg-linear-to-r from-orange-500 via-pink-500 to-violet-500 bg-clip-text text-transparent">
             Drop
           </span>
-          <span className="bg-linear-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
             Pin
           </span>
-          <span className="text-slate-300">/&gt;</span>
+          <span className="text-slate-400">/&gt;</span>
         </div>
 
         <div className="flex items-center gap-2 text-sm text-slate-400">
