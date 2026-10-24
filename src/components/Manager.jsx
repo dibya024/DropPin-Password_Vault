@@ -5,6 +5,8 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { v4 as uuid } from "uuid";
 
+import "../../CSS/Manager.css"
+
 import saveIcon from "../images/save-icon.png";
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";

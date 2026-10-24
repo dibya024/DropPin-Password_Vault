@@ -1,4 +1,4 @@
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000")
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000/api/passwords")
     .trim()
     .replace(/\/+$/, "");
 
@@ -18,7 +18,7 @@ async function request(path, options = {}) {
 }
 
 export async function getPasswords() {
-    const passwords = await request("/");
+    const passwords = await request("/api/passwords");
     if (!Array.isArray(passwords)) {
         throw new Error("The server returned an invalid passwords response");
     }
@@ -26,7 +26,7 @@ export async function getPasswords() {
 }
 
 export async function createPassword(password) {
-    const data = await request("/", {
+    const data = await request("/api/passwords", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(password),
@@ -38,7 +38,7 @@ export async function createPassword(password) {
 }
 
 export function updatePassword(id, password) {
-    return request(`/${encodeURIComponent(id)}`, {
+    return request(`/api/passwords/${encodeURIComponent(id)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(password),
@@ -46,7 +46,7 @@ export function updatePassword(id, password) {
 }
 
 export function deletePassword(id) {
-    return request(`/${encodeURIComponent(id)}`, {
+    return request(`/api/passwords/${encodeURIComponent(id)}`, {
         method: "DELETE",
     });
 }

@@ -3,6 +3,8 @@ import { useState } from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+import "../../CSS/ViewStore.css"
+
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
 import copy_img from "../images/copy.png";
@@ -62,7 +64,7 @@ const ViewStore = ({
     });
 
     seteditingId(selectedPassword._id);
-    navigate("/");
+    navigate("/home");
   };
 
   const copyText = (text) => {

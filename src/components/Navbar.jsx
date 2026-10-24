@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
+import "../../CSS/Navbar.css"
+
 const Navbar = ({ isloggedin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -14,8 +16,7 @@ const Navbar = ({ isloggedin }) => {
 
   const preLogLinks = [
     { name: "Login", href: "/login" },
-    { name: "Sign Up", href: "/signin" },
-    // {name: "PreloginHomepage", href:"/"}
+    { name: "Sign Up", href: "/signup" },
   ];
 
   return (

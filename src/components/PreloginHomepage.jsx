@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+
+import "../../CSS/PreloginHomepage.css"
+
 import heroArtwork from "../assets/hero.png";
 
 const PreloginHomepage = () => {
@@ -38,7 +41,7 @@ const PreloginHomepage = () => {
             <div className="prelogin-hero__actions">
               <Link
                 className="prelogin-button prelogin-button--primary"
-                to="/signin"
+                to="/signup"
               >
                 Create your free vault
                 <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -279,7 +282,7 @@ const PreloginHomepage = () => {
             <span>READY WHEN YOU ARE</span>
             <h2>Make room for a little more peace of mind.</h2>
           </div>
-          <Link className="prelogin-button prelogin-button--primary" to="/signin">
+          <Link className="prelogin-button prelogin-button--primary" to="/signup">
             Get started
             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />

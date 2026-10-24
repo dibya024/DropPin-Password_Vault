@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import "../../CSS/Login.css"
+
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
 

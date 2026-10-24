@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 import ViewStore from "./components/ViewStore";
 import Settings from "./components/Settings";
 import Profile from "./components/Profile";
-import Signin from "./components/Signin";
+import Signup from "./components/Signup";
 import NotFound from "./components/404";
 import Login from "./components/Login";
 import PreloginHomepage from "./components/PreloginHomepage";
@@ -48,7 +48,7 @@ function App() {
     password: "",
   });
 
-  const isloggedin = false;
+  const isloggedin = true;
 
   return (
     <BrowserRouter>
@@ -63,7 +63,7 @@ function App() {
           </p>
         )}
         <Routes>
-          <Route path="/signin" element={<Signin />}></Route>
+          <Route path="/signup" element={<Signup />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/" element={<PreloginHomepage/>}></Route>
           {isloggedin ? (

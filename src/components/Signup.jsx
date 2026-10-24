@@ -1,9 +1,11 @@
 import { useState } from "react";
 
+import "../../CSS/Signup.css"
+
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
 
-const Signin = () => {
+const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -23,38 +25,38 @@ const Signin = () => {
       type="button"
       onClick={() => setPasswordVisible((visible) => !visible)}
       aria-label={`${passwordVisible ? "Hide" : "Show"} ${label}`}
-      className="signin-password-toggle"
+      className="signup-password-toggle"
     >
       <img src={passwordVisible ? eyeCross : eye} alt="" />
     </button>
   );
 
   return (
-    <div className="signin-page">
-      <div className="signin-orb signin-orb--cyan" aria-hidden="true" />
-      <div className="signin-orb signin-orb--violet" aria-hidden="true" />
+    <div className="signup-page">
+      <div className="signup-orb signup-orb--cyan" aria-hidden="true" />
+      <div className="signup-orb signup-orb--violet" aria-hidden="true" />
 
-      <main className="signin-layout">
-        <section className="signin-showcase" aria-label="About DropPin">
-          <div className="signin-showcase__eyebrow">
-            <span className="signin-showcase__status" />
+      <main className="signup-layout">
+        <section className="signup-showcase" aria-label="About DropPin">
+          <div className="signup-showcase__eyebrow">
+            <span className="signup-showcase__status" />
             YOUR PERSONAL PASSWORD VAULT
           </div>
 
-          <h1 className="signin-showcase__title">
+          <h1 className="signup-showcase__title">
             Your digital life,
             <br />
             <span>under lock</span>
-            <span className="signin-showcase__period">.</span>
+            <span className="signup-showcase__period">.</span>
           </h1>
-          <p className="signin-showcase__description">
+          <p className="signup-showcase__description">
             One calm, secure place for the passwords that keep your world
             moving.
           </p>
 
-          <div className="signin-vault-card" aria-hidden="true">
-            <div className="signin-vault-card__top">
-              <span className="signin-vault-card__brand">
+          <div className="signup-vault-card" aria-hidden="true">
+            <div className="signup-vault-card__top">
+              <span className="signup-vault-card__brand">
                 <svg viewBox="0 0 24 24" fill="none">
                   <path
                     d="M12 3 5 6v5c0 4.5 2.8 8.1 7 10 4.2-1.9 7-5.5 7-10V6l-7-3Z"
@@ -71,27 +73,27 @@ const Signin = () => {
                 </svg>
                 DropPin vault
               </span>
-              <span className="signin-vault-card__secure">ENCRYPTED</span>
+              <span className="signup-vault-card__secure">ENCRYPTED</span>
             </div>
-            <div className="signin-vault-card__item">
-              <span className="signin-vault-card__icon">N</span>
+            <div className="signup-vault-card__item">
+              <span className="signup-vault-card__icon">N</span>
               <span>
                 <strong>Everyday accounts</strong>
                 <small>Protected and ready</small>
               </span>
-              <span className="signin-vault-card__dots">••••••</span>
+              <span className="signup-vault-card__dots">••••••</span>
             </div>
-            <div className="signin-vault-card__item signin-vault-card__item--muted">
-              <span className="signin-vault-card__icon">✦</span>
+            <div className="signup-vault-card__item signup-vault-card__item--muted">
+              <span className="signup-vault-card__icon">✦</span>
               <span>
                 <strong>Peace of mind</strong>
                 <small>All in one place</small>
               </span>
-              <span className="signin-vault-card__check">✓</span>
+              <span className="signup-vault-card__check">✓</span>
             </div>
           </div>
 
-          <p className="signin-showcase__footnote">
+          <p className="signup-showcase__footnote">
             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path
                 d="M10 2.5 4 5v4.2c0 3.8 2.4 6.8 6 8.3 3.6-1.5 6-4.5 6-8.3V5l-6-2.5Z"
@@ -110,10 +112,10 @@ const Signin = () => {
           </p>
         </section>
 
-        <section className="signin-card" aria-labelledby="signin-title">
-          <div className="signin-card__accent" />
-          <div className="signin-card__heading">
-            <div className="signin-card__icon" aria-hidden="true">
+        <section className="signup-card" aria-labelledby="signup-title">
+          <div className="signup-card__accent" />
+          <div className="signup-card__heading">
+            <div className="signup-card__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <rect
                   x="4"
@@ -133,19 +135,19 @@ const Signin = () => {
               </svg>
             </div>
             <div>
-              <p className="signin-card__kicker">GET STARTED</p>
-              <h2 id="signin-title">Create your account</h2>
-              <p className="signin-card__subtitle">
+              <p className="signup-card__kicker">GET STARTED</p>
+              <h2 id="signup-title">Create your account</h2>
+              <p className="signup-card__subtitle">
                 Your passwords deserve a better home.
               </p>
             </div>
           </div>
 
-          <form className="signin-form">
-            <div className="signin-field">
-              <label htmlFor="signin-email">Email address</label>
+          <form className="signup-form">
+            <div className="signup-field">
+              <label htmlFor="signup-email">Email address</label>
               <input
-                id="signin-email"
+                id="signup-email"
                 name="email"
                 type="email"
                 placeholder="you@example.com"
@@ -156,11 +158,11 @@ const Signin = () => {
               />
             </div>
 
-            <div className="signin-field">
-              <label htmlFor="signin-password">Create password</label>
-              <div className="signin-input-wrap">
+            <div className="signup-field">
+              <label htmlFor="signup-password">Create password</label>
+              <div className="signup-input-wrap">
                 <input
-                  id="signin-password"
+                  id="signup-password"
                   name="password"
                   type={passwordVisible ? "text" : "password"}
                   placeholder="At least 8 characters"
@@ -173,11 +175,11 @@ const Signin = () => {
               </div>
             </div>
 
-            <div className="signin-field">
-              <label htmlFor="signin-confirm-password">Confirm password</label>
-              <div className="signin-input-wrap">
+            <div className="signup-field">
+              <label htmlFor="signup-confirm-password">Confirm password</label>
+              <div className="signup-input-wrap">
                 <input
-                  id="signin-confirm-password"
+                  id="signup-confirm-password"
                   name="confirmPassword"
                   type={passwordVisible ? "text" : "password"}
                   placeholder="Enter it one more time"
@@ -190,7 +192,7 @@ const Signin = () => {
               </div>
             </div>
 
-            <button className="signin-submit" type="submit">
+            <button className="signup-submit" type="submit">
               <span>Create account</span>
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path
@@ -204,10 +206,10 @@ const Signin = () => {
             </button>
           </form>
 
-          <p className="signin-card__login">
+          <p className="signup-card__login">
             Already have an account? <a href="/login">Log in</a>
           </p>
-          <p className="signin-card__privacy">
+          <p className="signup-card__privacy">
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path
                 d="M8 1.8 3 4v3.5c0 3.1 2 5.6 5 6.8 3-1.2 5-3.7 5-6.8V4L8 1.8Z"
@@ -230,4 +232,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;
