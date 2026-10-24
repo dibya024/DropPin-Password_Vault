@@ -9,9 +9,12 @@ import Footer from "./components/Footer";
 import ViewStore from "./components/ViewStore";
 import Settings from "./components/Settings";
 import Profile from "./components/Profile";
+import Signin from "./components/Signin";
+import NotFound from "./components/404";
+import Login from "./components/Login";
+import PreloginHomepage from "./components/PreloginHomepage";
 
 import { getPasswords } from "./api/passwords";
-// import { set } from "mongoose";
 
 function App() {
   const [passwordArray, setpasswordArray] = useState([]);
@@ -45,44 +48,60 @@ function App() {
     password: "",
   });
 
+  const isloggedin = false;
+
   return (
     <BrowserRouter>
-      <Navbar />
-      <main className="container">
-        {loadError && (
-          <p role="alert">Unable to load saved passwords: {loadError}</p>
+      <Navbar isloggedin={isloggedin} />
+      <main>
+        {isloggedin && loadError && (
+          <p
+            role="alert"
+            className="flex justify-center font-semibold bg-linear-to-r from-red-600 via-orange-500 to-violet-400"
+          >
+            Unable to load saved passwords: {loadError}
+          </p>
         )}
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Manager
-                passwordArray={passwordArray}
-                setpasswordArray={setpasswordArray}
-                form={form}
-                setform={setform}
-                editingId= {editingId}
-                seteditingId= {seteditingId}
+          <Route path="/signin" element={<Signin />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/" element={<PreloginHomepage/>}></Route>
+          {isloggedin ? (
+            <>
+              <Route
+                path="/home"
+                element={
+                  <Manager
+                    passwordArray={passwordArray}
+                    setpasswordArray={setpasswordArray}
+                    form={form}
+                    setform={setform}
+                    editingId={editingId}
+                    seteditingId={seteditingId}
+                  />
+                }
               />
-            }
-          />
-          <Route
-            path="/view-store"
-            element={
-              <ViewStore
-                passwordArray={passwordArray}
-                setpasswordArray={setpasswordArray}
-                form={form}
-                setform={setform}
-                seteditingId= {seteditingId}
+              <Route
+                path="/view-store"
+                element={
+                  <ViewStore
+                    passwordArray={passwordArray}
+                    setpasswordArray={setpasswordArray}
+                    form={form}
+                    setform={setform}
+                    seteditingId={seteditingId}
+                  />
+                }
               />
-            }
-          />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/logout"></Route>
+            </>
+          ) : null}
+          <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </main>
-      <Footer />
+      {isloggedin && <Footer />}
     </BrowserRouter>
   );
 }

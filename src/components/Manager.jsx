@@ -82,7 +82,7 @@ const Manager = ({
         theme="light"
         transition={Bounce}
       />
-      <div className="home-page relative isolate min-h-screen overflow-hidden text-slate-100">
+      <div className="home-page relative isolate min-h-screen overflow-hidden text-slate-100 w-full">
         <div
           aria-hidden="true"
           className="home-page__backdrop pointer-events-none absolute inset-0 -z-10 overflow-hidden"

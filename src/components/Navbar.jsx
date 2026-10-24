@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ isloggedin }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Home", href: "/" },
+    { name: "Home", href: "/home" },
     { name: "View Store", href: "/view-store" },
     { name: "Settings", href: "/settings" },
     { name: "You", href: "/profile" },
+    { name: "LogOut", href: "/logout" },
+  ];
+
+  const preLogLinks = [
+    { name: "Login", href: "/login" },
+    { name: "Sign Up", href: "/signin" },
+    // {name: "PreloginHomepage", href:"/"}
   ];
 
   return (
@@ -19,7 +26,7 @@ const Navbar = () => {
         <div className="pointer-events-none absolute left-1/4 top-0 -z-10 h-20 w-40 rounded-full bg-violet-500/10 blur-3xl" />
 
         <Link
-          to="/"
+          to={isloggedin ? "/home" : "/"}
           aria-label="DropPin home"
           onClick={() => setMenuOpen(false)}
           className="group inline-flex items-center gap-2.5"
@@ -53,27 +60,49 @@ const Navbar = () => {
         </Link>
 
         <ul className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 md:flex">
-          {navLinks.map((link) => (
-            <li key={link.name}>
-              <NavLink
-                to={link.href}
-                end={link.href === "/"}
-                className={({ isActive }) =>
-                  `relative rounded-full px-4 py-2 text-sm font-medium transition-all duration-400 ${
-                    isActive
-                      ? "bg-linear-to-r from-violet-400/50 to-cyan-300/20 text-cyan-100 shadow-sm shadow-cyan-950/20"
-                      : "text-slate-400 hover:bg-white/6 hover:text-slate-100"
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <span className="inline-flex items-center gap-1">
-                    {link.name}
-                  </span>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          {isloggedin
+            ? navLinks.map((link) => (
+                <li key={link.name}>
+                  <NavLink
+                    to={link.href}
+                    end={link.href === "/"}
+                    className={({ isActive }) =>
+                      `relative rounded-full px-4 py-2 text-sm font-medium transition-all duration-400 ${
+                        isActive
+                          ? "bg-linear-to-r from-violet-400/50 to-cyan-300/20 text-cyan-100 shadow-sm shadow-cyan-950/20"
+                          : "text-slate-400 hover:bg-white/6 hover:text-slate-100"
+                      }`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <span className="inline-flex items-center gap-1">
+                        {link.name}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+              ))
+            : preLogLinks.map((link) => (
+                <li key={link.name}>
+                  <NavLink
+                    to={link.href}
+                    end={link.href === "/"}
+                    className={({ isActive }) =>
+                      `relative rounded-full px-4 py-2 text-sm font-medium transition-all duration-400 ${
+                        isActive
+                          ? "bg-linear-to-r from-violet-400/50 to-cyan-300/20 text-cyan-100 shadow-sm shadow-cyan-950/20"
+                          : "text-slate-400 hover:bg-white/6 hover:text-slate-100"
+                      }`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <span className="inline-flex items-center gap-1">
+                        {link.name}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+              ))}
         </ul>
 
         <button
@@ -116,31 +145,57 @@ const Navbar = () => {
       >
         <div className="overflow-hidden">
           <ul className="space-y-1 border-t border-white/[0.07] bg-[#080a18]/95 px-4 py-3 sm:px-8">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <NavLink
-                  to={link.href}
-                  end={link.href === "/"}
-                  onClick={() => setMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
-                      isActive
-                        ? "border border-cyan-300/10 bg-linear-to-r from-violet-400/15 to-cyan-400/10 text-cyan-100"
-                        : "text-slate-300 hover:bg-white/5 hover:text-white"
-                    }`
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      {link.name}
-                      {isActive && (
-                        <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.8)]" />
+            {isloggedin
+              ? navLinks.map((link) => (
+                  <li key={link.name}>
+                    <NavLink
+                      to={link.href}
+                      end={link.href === "/"}
+                      onClick={() => setMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                          isActive
+                            ? "border border-cyan-300/10 bg-linear-to-r from-violet-400/15 to-cyan-400/10 text-cyan-100"
+                            : "text-slate-300 hover:bg-white/5 hover:text-white"
+                        }`
+                      }
+                    >
+                      {({ isActive }) => (
+                        <>
+                          {link.name}
+                          {isActive && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.8)]" />
+                          )}
+                        </>
                       )}
-                    </>
-                  )}
-                </NavLink>
-              </li>
-            ))}
+                    </NavLink>
+                  </li>
+                ))
+              : preLogLinks.map((link) => (
+                  <li key={link.name}>
+                    <NavLink
+                      to={link.href}
+                      end={link.href === "/"}
+                      onClick={() => setMenuOpen(false)}
+                      className={({ isActive }) =>
+                        `flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                          isActive
+                            ? "border border-cyan-300/10 bg-linear-to-r from-violet-400/15 to-cyan-400/10 text-cyan-100"
+                            : "text-slate-300 hover:bg-white/5 hover:text-white"
+                        }`
+                      }
+                    >
+                      {({ isActive }) => (
+                        <>
+                          {link.name}
+                          {isActive && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_8px_rgba(103,232,249,0.8)]" />
+                          )}
+                        </>
+                      )}
+                    </NavLink>
+                  </li>
+                ))}
           </ul>
         </div>
       </div>
