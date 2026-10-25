@@ -1,13 +1,15 @@
 # 🔐 DropPin — Password Manager
 
-DropPin is a password manager web application built with React, Vite, Express, and MongoDB. The frontend manages saved credentials, and the backend exposes API endpoints for password entries and account registration.
+DropPin is a password manager web application built with React, Vite, Express, Node and MongoDB. Users can register and sign in, and manage password entries scoped to their account.
 
 ## ✨ Features
 
 - 🔑 **Password Management** — Add and manage your saved credentials.
 - 👁️ **Show/Hide Passwords** — Toggle password visibility.
 - 📋 **Easy Access** — View and organize your saved entries.
-- 🧾 **Account registration API** — Register with an email address and password.
+- 🧾 **Account authentication** — Register, sign in, check the current session, and sign out.
+- 🔐 **Protected vault** — Password-entry endpoints require a session and enforce per-user ownership.
+- 🔒 **Encrypted storage** — Vault passwords are encrypted at rest with AES-256-GCM.
 - 🎨 **Clean UI** — A simple, responsive interface.
 - ⚡ **Fast Performance** — Powered by React and Vite.
 
@@ -16,11 +18,12 @@ DropPin is a password manager web application built with React, Vite, Express, a
 - **React** — Component-based user interface
 - **Vite** — Development server and build tool
 - **JavaScript (ES6+)** — Application logic
-- **CSS** — Styling
+- **TailwindCSS** — Styling
 - **ESLint** — Code quality and linting
 - **Express and MongoDB** — Backend API and data storage
 - **Mongoose** — MongoDB object modeling
 - **bcryptjs** — Hashing account passwords during registration
+- **Node.js crypto** — AES-256-GCM encryption for saved vault passwords
 
 ## 🚀 Getting Started
 
@@ -69,7 +72,11 @@ Make sure you have installed:
    PORT=3000
    ```
 
-   Generate `VAULT_ENCRYPTION_KEY` once with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"` from the backend directory. Keep this key backed up securely and unchanged: losing or rotating it without re-encrypting the vault makes encrypted passwords unreadable. Keep `.env` private and never commit credentials. Passwords belonging to a signed-in user are encrypted with AES-256-GCM at rest; owned legacy plaintext entries are encrypted when first fetched. Legacy entries without a confirmed `userId` are not exposed or migrated automatically. Start the backend:
+   Generate `VAULT_ENCRYPTION_KEY` once with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"` from the backend directory. Keep this key backed up securely and unchanged: losing or rotating it without re-encrypting the vault makes encrypted passwords unreadable. Keep `.env` private and never commit credentials. Passwords belonging to a signed-in user are encrypted with AES-256-GCM at rest. Owned legacy plaintext entries are encrypted when first fetched; records without a confirmed `userId` are neither returned nor migrated automatically.
+
+   For deployment, configure `MONGO_URI`, `SESSION_SECRET`, `VAULT_ENCRYPTION_KEY`, and `PORT` as backend environment variables in the hosting provider. Configure the frontend's `VITE_API_URL` to the deployed backend origin, and update the backend CORS origin in `server.js` to the deployed frontend origin. Use HTTPS in production so session cookies and API traffic are protected in transit. Never commit or expose the encryption key.
+
+   Start the backend:
 
    ```bash
    npm run dev
@@ -84,7 +91,7 @@ Make sure you have installed:
 
 6. Open the local frontend URL, usually `http://localhost:5173/`.
 
-The frontend expects the API at `http://localhost:3000` by default. Set `VITE_API_URL` in the frontend environment if the backend is running at a different URL.
+The frontend expects the API at `http://localhost:3000` by default. Set `VITE_API_URL` in the frontend environment if the backend is running at a different origin. Rebuild/redeploy the frontend after changing this Vite environment variable.
 
 ## 🔌 Backend API
 
@@ -101,9 +108,7 @@ The backend listens on port `3000` by default. Current endpoints are:
 | `GET` | `/api/auth/me` | Check the current session |
 | `POST` | `/api/auth/logout` | End the current session |
 
-Password endpoints require an authenticated session and limit each operation to the current user's entries. Registration requires a valid email and a password of at least 8 characters. The backend hashes account passwords before storing them and returns the new account's ID and email.
-
-Login, logout, session management, and authorization are **not implemented yet**. The password-entry endpoints are currently unauthenticated and are not scoped to individual accounts.
+Password endpoints require an authenticated session and limit every read, create, update, and delete operation to the current user's entries. Registration requires a valid email and a password of at least 8 characters. Account passwords are hashed with bcrypt before storage; saved vault passwords are encrypted with AES-256-GCM and decrypted only when returned to the authenticated user.
 
 ## 📁 Project Structure
 
@@ -116,6 +121,8 @@ Password-Manager/
 │   ├── routes/
 │   │   ├── authRouter.js
 │   │   └── passwordRouter.js
+│   ├── utils/
+│   │   └── passwordEncryption.js
 │   ├── server.js
 │   └── package.json
 └── DropPin/
@@ -138,26 +145,25 @@ Password-Manager/
 | `npm run preview` | Preview the production build |
 | `npm run lint` | Run ESLint checks |
 
-## 🔒 Security Note
+## 🔒 Security Notes
 
-This project is intended for learning and development unless its security has been independently reviewed.
+This project is intended for learning and development. Authentication and per-user authorization are implemented, and vault password fields are encrypted at rest; however, this does not constitute an independent security review or guarantee the application is safe for production use.
 
-**Do not store real passwords or sensitive credentials in this application.** Account registration currently hashes account passwords, but login and authorization are not implemented. Saved password entries are currently stored without encryption and are accessible through unauthenticated API endpoints. Before using DropPin with real credentials, implement and verify authentication, per-user authorization, encryption, secure key management, and safe storage practices.
+Protect `VAULT_ENCRYPTION_KEY` as a critical secret. Anyone with access to both the database and this key can decrypt the vault. Keep secure backups of the key, use HTTPS in production, and review the hosting provider's session and cookie settings before deployment. Legacy records without an owner are intentionally not assigned to an account automatically.
 
 Never commit API keys, encryption keys, `.env` files, or real user credentials to GitHub.
 
 ## 🗺️ Future Improvements
 
-- [ ] Add secure password storage and encryption.
 - [ ] Implement password generation.
 - [ ] Add search and filtering.
 - [ ] Add copy-to-clipboard functionality.
 - [ ] Improve mobile responsiveness.
-- [ ] Complete authentication, authorization, and secure backup options.
+- [ ] Add secure vault-key backup and recovery workflows.
 
 ## 👨‍💻 Author
 
-**Dibya Sahoo**
+**Dibyaranjan Sahoo**
 
 - GitHub: [@dibya024](https://github.com/dibya024)
 
