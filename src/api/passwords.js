@@ -1,18 +1,20 @@
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000/api/passwords")
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:3000/")
     .trim()
     .replace(/\/+$/, "");
 
 async function request(path, options = {}) {
-    const response = await fetch(`${API_URL}${path}`, options);
+    const response = await fetch(`${API_URL}${path}`, { ...options, credentials: "include" });
     const contentType = response.headers.get("content-type") || "";
     const data = contentType.includes("application/json")
         ? await response.json()
         : null;
 
     if (!response.ok) {
-        throw new Error(
+        const error = new Error(
             data?.error || `Request failed with status ${response.status}`
         );
+        error.status = response.status;
+        throw error;
     }
     return data;
 }

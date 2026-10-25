@@ -1,23 +1,42 @@
 import { useState } from "react";
 
-import "../../CSS/Signup.css"
+import "../../CSS/Signup.css";
+
+import { useNavigate, Link } from "react-router-dom";
+import { registeredAccount } from "../api/auth";
 
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
 
 const Signup = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [signupNotice, setsignupNotice] = useState("");
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const [passwordError, setPasswordError] = useState("");
 
   const handleChange = (event) => {
-    setForm((previous) => ({
-      ...previous,
+    const updatedForm = {
+      ...form,
       [event.target.name]: event.target.value,
-    }));
+    };
+
+    setForm(updatedForm);
+
+    if (updatedForm.password && updatedForm.confirmPassword) {
+      setPasswordError(
+        updatedForm.password === updatedForm.confirmPassword
+          ? ""
+          : "Passwords do not match.",
+      );
+    } else {
+      setPasswordError("");
+    }
   };
 
   const passwordToggle = (label) => (
@@ -30,6 +49,22 @@ const Signup = () => {
       <img src={passwordVisible ? eyeCross : eye} alt="" />
     </button>
   );
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setsignupNotice("");
+
+    if (form.password !== form.confirmPassword) {
+      setPasswordError("Passwords do not match.");
+      return;
+    }
+    try {
+      await registeredAccount(form.email, form.password);
+      navigate("/login");
+    } catch (error) {
+      setsignupNotice(error.message);
+    }
+  };
 
   return (
     <div className="signup-page">
@@ -143,7 +178,7 @@ const Signup = () => {
             </div>
           </div>
 
-          <form className="signup-form">
+          <form className="signup-form" onSubmit={handleSubmit}>
             <div className="signup-field">
               <label htmlFor="signup-email">Email address</label>
               <input
@@ -190,6 +225,11 @@ const Signup = () => {
                 />
                 {passwordToggle("password")}
               </div>
+              {passwordError && (
+                <p className="mt-2 text-sm text-rose-400" role="alert">
+                  {passwordError}
+                </p>
+              )}
             </div>
 
             <button className="signup-submit" type="submit">
@@ -204,10 +244,13 @@ const Signup = () => {
                 />
               </svg>
             </button>
+            {signupNotice && (
+              <p className="mt-2 text-sm text-rose-400" role="alert">{signupNotice}</p>
+            )}
           </form>
 
           <p className="signup-card__login">
-            Already have an account? <a href="/login">Log in</a>
+            Already have an account? <Link to="/login">Log in</Link>
           </p>
           <p className="signup-card__privacy">
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">

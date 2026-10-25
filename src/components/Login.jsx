@@ -1,28 +1,45 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
+
 import "../../CSS/Login.css"
+import { loginAccount } from "../api/auth";
 
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
 
-const Login = () => {
+const Login = ({onLogin}) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginNotice, setLoginNotice] = useState("");
 
-  const handleSubmit = (event) => {
+  const navigate= useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoginNotice("Sign-in isn't connected yet. Please check back soon.");
+    setLoginNotice("");
+
+    const formData= new FormData(event.currentTarget);
+    const email= formData.get("email");
+    const password= formData.get("password");
+
+    try {
+      const {user}= await loginAccount(email, password);
+      onLogin(user);
+      navigate("/home");
+    } catch(error) {
+      setLoginNotice(error.message);
+    }
   };
 
   return (
-    <div className="signin-page">
-      <div className="signin-orb signin-orb--cyan" aria-hidden="true" />
-      <div className="signin-orb signin-orb--violet" aria-hidden="true" />
+    <div className="signup-page">
+      <div className="signup-orb signup-orb--cyan" aria-hidden="true" />
+      <div className="signup-orb signup-orb--violet" aria-hidden="true" />
 
-      <main className="signin-layout login-layout">
+      <main className="signup-layout login-layout">
         <section
-          className="signin-showcase login-showcase"
+          className="signup-showcase login-showcase"
           aria-label="Welcome to DropPin"
         >
           <div className="login-showcase__eyebrow">
@@ -170,10 +187,10 @@ const Login = () => {
           </div>
         </section>
 
-        <section className="signin-card login-card" aria-labelledby="login-title">
-          <div className="signin-card__accent" />
-          <div className="signin-card__heading">
-            <div className="signin-card__icon" aria-hidden="true">
+        <section className="signup-card login-card" aria-labelledby="login-title">
+          <div className="signup-card__accent" />
+          <div className="signup-card__heading">
+            <div className="signup-card__icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none">
                 <rect
                   x="4"
@@ -193,16 +210,16 @@ const Login = () => {
               </svg>
             </div>
             <div>
-              <p className="signin-card__kicker">WELCOME BACK</p>
+              <p className="signup-card__kicker">WELCOME BACK</p>
               <h2 id="login-title">Sign in to DropPin</h2>
-              <p className="signin-card__subtitle">
+              <p className="signup-card__subtitle">
                 Enter your details to open your vault.
               </p>
             </div>
           </div>
 
-          <form className="signin-form" onSubmit={handleSubmit}>
-            <div className="signin-field">
+          <form className="signup-form" onSubmit={handleSubmit}>
+            <div className="signup-field">
               <label htmlFor="login-email">Email address</label>
               <input
                 id="login-email"
@@ -214,9 +231,9 @@ const Login = () => {
               />
             </div>
 
-            <div className="signin-field">
+            <div className="signup-field">
               <label htmlFor="login-password">Password</label>
-              <div className="signin-input-wrap">
+              <div className="signup-input-wrap">
                 <input
                   id="login-password"
                   name="password"
@@ -229,7 +246,7 @@ const Login = () => {
                   type="button"
                   onClick={() => setPasswordVisible((visible) => !visible)}
                   aria-label={`${passwordVisible ? "Hide" : "Show"} password`}
-                  className="signin-password-toggle"
+                  className="signup-password-toggle"
                 >
                   <img src={passwordVisible ? eyeCross : eye} alt="" />
                 </button>
@@ -241,7 +258,7 @@ const Login = () => {
               <span>Remember me on this device</span>
             </label>
 
-            <button className="signin-submit" type="submit">
+            <button className="signup-submit" type="submit">
               <span>Unlock my vault</span>
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path
@@ -260,10 +277,10 @@ const Login = () => {
             )}
           </form>
 
-          <p className="signin-card__login">
-            New to DropPin? <Link to="/signin">Create an account</Link>
+          <p className="signup-card__login">
+            New to DropPin? <Link to="/signup">Create an account</Link>
           </p>
-          <p className="signin-card__privacy">
+          <p className="signup-card__privacy">
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path
                 d="M8 1.8 3 4v3.5c0 3.1 2 5.6 5 6.8 3-1.2 5-3.7 5-6.8V4L8 1.8Z"

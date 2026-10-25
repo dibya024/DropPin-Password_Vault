@@ -60,14 +60,16 @@ Make sure you have installed:
    npm install
    ```
 
-   Create a `backend/.env` file with your MongoDB connection string:
+   Create a `backend/.env` file with your MongoDB connection string, session secret, and vault encryption key:
 
    ```env
    MONGO_URI=your_mongodb_connection_string
+   SESSION_SECRET=your_long_random_session_secret
+   VAULT_ENCRYPTION_KEY=your_base64_encoded_32_byte_key
    PORT=3000
    ```
 
-   Keep `.env` private and never commit credentials. Start the backend:
+   Generate `VAULT_ENCRYPTION_KEY` once with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"` from the backend directory. Keep this key backed up securely and unchanged: losing or rotating it without re-encrypting the vault makes encrypted passwords unreadable. Keep `.env` private and never commit credentials. Passwords belonging to a signed-in user are encrypted with AES-256-GCM at rest; owned legacy plaintext entries are encrypted when first fetched. Legacy entries without a confirmed `userId` are not exposed or migrated automatically. Start the backend:
 
    ```bash
    npm run dev
@@ -95,8 +97,11 @@ The backend listens on port `3000` by default. Current endpoints are:
 | `PUT` | `/api/passwords/:id` | Update a password entry |
 | `DELETE` | `/api/passwords/:id` | Delete a password entry |
 | `POST` | `/api/auth/register` | Register an account using email and password |
+| `POST` | `/api/auth/login` | Sign in and create a session |
+| `GET` | `/api/auth/me` | Check the current session |
+| `POST` | `/api/auth/logout` | End the current session |
 
-Registration requires a valid email and a password of at least 8 characters. The backend hashes the account password before storing it and returns the new account's ID and email.
+Password endpoints require an authenticated session and limit each operation to the current user's entries. Registration requires a valid email and a password of at least 8 characters. The backend hashes account passwords before storing them and returns the new account's ID and email.
 
 Login, logout, session management, and authorization are **not implemented yet**. The password-entry endpoints are currently unauthenticated and are not scoped to individual accounts.
 
