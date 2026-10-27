@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-import "../../CSS/ViewStore.css"
+import "../../CSS/ViewStore.css";
 
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
@@ -64,6 +64,10 @@ const ViewStore = ({
     });
 
     seteditingId(selectedPassword._id);
+    navigate("/home");
+  };
+
+  const handlePagechange = () => {
     navigate("/home");
   };
 
@@ -262,9 +266,12 @@ const ViewStore = ({
                   Your vault is empty
                 </p>
 
-                <p className="mt-2 text-sm text-slate-500">
-                  Add your first login above to get started.
-                </p>
+                <button
+                  className="mt-2 text-sm text-cyan-400 hover:underline hover:text-blue-500 hover:cursor-pointer"
+                  onClick={handlePagechange}
+                >
+                  Add site
+                </button>
               </div>
             ) : (
               <div className="grid gap-3 md:grid-cols-2">

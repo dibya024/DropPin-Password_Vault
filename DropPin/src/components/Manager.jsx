@@ -4,8 +4,9 @@ import React from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { v4 as uuid } from "uuid";
+import { useNavigate } from "react-router-dom";
 
-import "../../CSS/Manager.css"
+import "../../CSS/Manager.css";
 
 import saveIcon from "../images/save-icon.png";
 import eye from "../images/eye.png";
@@ -22,6 +23,7 @@ const Manager = ({
   seteditingId,
 }) => {
   const ref = useRef(null);
+  const navigate= useNavigate();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -44,6 +46,7 @@ const Manager = ({
       setform({ site: "", username: "", password: "" });
       seteditingId(null);
       setPasswordVisible(false);
+      navigate("/view-store");
 
       toast(
         wasEditing

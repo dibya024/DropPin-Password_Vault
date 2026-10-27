@@ -19,19 +19,19 @@ async function request(path, options = {}) {
     return data;
 }
 
-export function registeredAccount(email, password) {
+export function registeredAccount(email, username, password) {
     return request("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, username, password }),
     });
 }
 
-export function loginAccount(email, password) {
+export function loginAccount(identifier, password) {
     return request("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
     });
 }
 
@@ -42,5 +42,17 @@ export function getCurrentUser() {
 export function logoutAccount(email, password) {
     return request("/api/auth/logout", {
         method: "POST",
+    });
+}
+
+export function requestEmailVerification() {
+    return request("/api/auth/email-verification/request", { method: "POST" });
+}
+
+export function verifyEmailCode(code) {
+    return request("/api/auth/email-verification/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
     });
 }

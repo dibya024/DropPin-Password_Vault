@@ -7,7 +7,6 @@ import Manager from "./components/Manager";
 import Footer from "./components/Footer";
 
 import ViewStore from "./components/ViewStore";
-import Settings from "./components/Settings";
 import Profile from "./components/Profile";
 import Signup from "./components/Signup";
 import NotFound from "./components/404";
@@ -26,6 +25,10 @@ function App() {
   const [currentUser, setcurrentUser] = useState(null);
   const [authLoading, setauthLoading] = useState(true);
   const [authError, setauthError] = useState("");
+
+  const [logoutPopupOpen, setLogoutPopupOpen] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
+  const [logoutPending, setLogoutPending] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
@@ -103,10 +106,7 @@ function App() {
         <p role="status">Checking your session...</p>
       ) : (
         <>
-          <Navbar
-            isloggedin={isloggedin}
-            onLogout={() => setcurrentUser(null)}
-          />
+          <Navbar isloggedin={isloggedin} />
           <main>
             {authError && (
               <p role="alert" className="flex justify-center text-rose-300">
@@ -155,15 +155,40 @@ function App() {
                       />
                     }
                   />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/settings" element={<Settings />} />
+                  <Route
+                    path="/profile"
+                    element={
+                      <Profile
+                        form={form}
+                        setform={setform}
+                        currentUser={currentUser}
+                        passwordArray={passwordArray}
+                        onUserUpdated={setcurrentUser}
+                        logoutPopupOpen={logoutPopupOpen}
+                        setLogoutPopupOpen={setLogoutPopupOpen}
+                        logoutError={logoutError}
+                        setLogoutError={setLogoutError}
+                        logoutPending={logoutPending}
+                        setLogoutPending={setLogoutPending}
+                        onLogout={() => setcurrentUser(null)}
+                      />
+                    }
+                  />
                 </>
               ) : (
                 <>
-                  <Route path="/home" element={<Navigate to="/login" replace />} />
-                  <Route path="/view-store" element={<Navigate to="/login" replace />} />
-                  <Route path="/profile" element={<Navigate to="/login" replace />} />
-                  <Route path="/settings" element={<Navigate to="/login" replace />} />
+                  <Route
+                    path="/home"
+                    element={<Navigate to="/login" replace />}
+                  />
+                  <Route
+                    path="/view-store"
+                    element={<Navigate to="/login" replace />}
+                  />
+                  <Route
+                    path="/profile"
+                    element={<Navigate to="/login" replace />}
+                  />
                 </>
               )}
               <Route path="*" element={<NotFound />}></Route>

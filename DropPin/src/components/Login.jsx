@@ -3,34 +3,38 @@ import { Link } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
 
-import "../../CSS/Login.css"
+import "../../CSS/Login.css";
 import { loginAccount } from "../api/auth";
 
 import eye from "../images/eye.png";
 import eyeCross from "../images/cross-eye.png";
 
-const Login = ({onLogin}) => {
+const Login = ({ onLogin }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginNotice, setLoginNotice] = useState("");
 
-  const navigate= useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoginNotice("");
 
-    const formData= new FormData(event.currentTarget);
-    const email= formData.get("email");
-    const password= formData.get("password");
+    const formData = new FormData(event.currentTarget);
+    const identifier = formData.get("identifier");
+    const password = formData.get("password");
 
     try {
-      const {user}= await loginAccount(email, password);
+      const { user } = await loginAccount(identifier, password);
       onLogin(user);
       navigate("/home");
-    } catch(error) {
+    } catch (error) {
       setLoginNotice(error.message);
     }
   };
+
+  const handleForgotpassword= () => {
+    
+  }
 
   return (
     <div className="signup-page">
@@ -115,9 +119,7 @@ const Login = ({onLogin}) => {
                 <strong>Google account</strong>
                 <small>Personal</small>
               </span>
-              <span className="login-vault-preview__dots">
-                ••••••••
-              </span>
+              <span className="login-vault-preview__dots">••••••••</span>
               <svg
                 className="login-vault-preview__check"
                 viewBox="0 0 20 20"
@@ -141,9 +143,7 @@ const Login = ({onLogin}) => {
                 <strong>Netflix</strong>
                 <small>Entertainment</small>
               </span>
-              <span className="login-vault-preview__dots">
-                ••••••••
-              </span>
+              <span className="login-vault-preview__dots">••••••••</span>
               <svg
                 className="login-vault-preview__check"
                 viewBox="0 0 20 20"
@@ -187,7 +187,10 @@ const Login = ({onLogin}) => {
           </div>
         </section>
 
-        <section className="signup-card login-card" aria-labelledby="login-title">
+        <section
+          className="signup-card login-card"
+          aria-labelledby="login-title"
+        >
           <div className="signup-card__accent" />
           <div className="signup-card__heading">
             <div className="signup-card__icon" aria-hidden="true">
@@ -220,13 +223,13 @@ const Login = ({onLogin}) => {
 
           <form className="signup-form" onSubmit={handleSubmit}>
             <div className="signup-field">
-              <label htmlFor="login-email">Email address</label>
+              <label htmlFor="login-identifier">Email or Username</label>
               <input
-                id="login-email"
-                name="email"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="email"
+                id="login-identifier"
+                name="identifier"
+                type="text"
+                placeholder="Email or username"
+                autoComplete="username"
                 required
               />
             </div>
@@ -253,10 +256,19 @@ const Login = ({onLogin}) => {
               </div>
             </div>
 
-            <label className="login-remember">
+            {/* <label className="login-remember">
               <input type="checkbox" name="rememberMe" />
               <span>Remember me on this device</span>
-            </label>
+            </label> */}
+
+            <div className="forgot-password">
+              <button
+                onClick={handleForgotpassword}
+                className="cursor-pointer hover:underline hover:text-blue-600"
+              >
+                Forgot Password ?
+              </button>
+            </div>
 
             <button className="signup-submit" type="submit">
               <span>Unlock my vault</span>

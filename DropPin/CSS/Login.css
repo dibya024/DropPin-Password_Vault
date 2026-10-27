@@ -701,6 +701,15 @@
   outline-offset: 3px;
 }
 
+.forgot-password {
+  display: flex;
+  justify-content:flex-end;
+  gap: 0.6rem;
+  color: #b7becf;
+  font-size: 0.76rem;
+  color:red;
+}
+
 .login-notice {
   margin: 0;
   color: #fcd34d;

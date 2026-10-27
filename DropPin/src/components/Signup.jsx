@@ -15,6 +15,7 @@ const Signup = () => {
 
   const [form, setForm] = useState({
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
@@ -59,7 +60,7 @@ const Signup = () => {
       return;
     }
     try {
-      await registeredAccount(form.email, form.password);
+      await registeredAccount(form.email, form.username, form.password);
       navigate("/login");
     } catch (error) {
       setsignupNotice(error.message);
@@ -194,6 +195,21 @@ const Signup = () => {
             </div>
 
             <div className="signup-field">
+              <label htmlFor="signup-username">Username</label>
+              <input
+                id="signup-username"
+                name="username"
+                type="text"
+                placeholder="Set Username"
+                autoComplete="nickname"
+                maxLength={40}
+                value={form.username}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="signup-field">
               <label htmlFor="signup-password">Create password</label>
               <div className="signup-input-wrap">
                 <input
@@ -245,7 +261,9 @@ const Signup = () => {
               </svg>
             </button>
             {signupNotice && (
-              <p className="mt-2 text-sm text-rose-400" role="alert">{signupNotice}</p>
+              <p className="mt-2 text-sm text-rose-400" role="alert">
+                {signupNotice}
+              </p>
             )}
           </form>
 
