@@ -99,6 +99,7 @@ function App() {
   }, []);
 
   const isloggedin = Boolean(currentUser);
+  // const isloggedin = true;
 
   return (
     <BrowserRouter>
@@ -110,7 +111,8 @@ function App() {
           <main>
             {authError && (
               <p role="alert" className="flex justify-center text-rose-300">
-                Unable to check your session: {authError}
+                {/* Unable to check your session: {authError} */}
+                {authError}
               </p>
             )}
             {isloggedin && loadError && (

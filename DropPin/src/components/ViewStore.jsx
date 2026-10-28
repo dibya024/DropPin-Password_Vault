@@ -87,15 +87,6 @@ const ViewStore = ({
     navigator.clipboard.writeText(text);
   };
 
-  const cardColors = [
-    "border-cyan-300/20 bg-cyan-900/25",
-    "border-orange-300/20 bg-orange-900/25",
-    "border-violet-300/20 bg-violet-900/25",
-    "border-rose-300/20 bg-rose-900/25",
-    "border-emerald-300/20 bg-emerald-900/25",
-    "border-amber-300/20 bg-amber-900/25",
-  ];
-
   return (
     <>
       <ToastContainer
@@ -111,21 +102,7 @@ const ViewStore = ({
         theme="light"
         transition={Bounce}
       />
-      <div className="viewstore-page relative isolate min-h-screen overflow-hidden text-slate-100">
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="viewstore-glow viewstore-glow--violet absolute -top-40 left-1/2 h-125 w-125 -translate-x-1/2 rounded-full bg-violet-600/25 blur-[130px]" />
-
-          <div className="viewstore-glow viewstore-glow--cyan absolute -left-37.5 top-[25%] h-125 w-125 rounded-full bg-cyan-500/15 blur-[140px]" />
-
-          <div className="viewstore-glow viewstore-glow--fuchsia absolute -right-32 top-[55%] h-125 w-125 rounded-full bg-fuchsia-600/10 blur-[140px]" />
-
-          <div className="viewstore-glow viewstore-glow--orange absolute -bottom-40 left-1/3 h-100 w-100 rounded-full bg-orange-500/10 blur-[130px]" />
-
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.035)_1px,transparent_0)] bg-size-[30px_30px]" />
-
-          <div className="absolute inset-0 bg-linear-to-b from-[#0b0d1b]/10 via-[#0b0d1b]/40 to-[#0b0d1b]/95" />
-        </div>
-
+      <div className="viewstore-page relative min-h-screen overflow-hidden text-slate-100">
         <main className="relative mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
           <header className="viewstore-header relative mx-auto mb-10 max-w-3xl px-5 py-8 text-center sm:mb-14 sm:px-10 sm:py-10">
             <div
@@ -222,7 +199,7 @@ const ViewStore = ({
             </div>
           </header>
 
-          <section className="relative rounded-3xl border border-white/10 bg-white/[0.035] p-5 backdrop-blur-xl sm:mt-12 sm:p-8">
+          <section className="viewstore-entries-panel relative rounded-3xl p-5 sm:mt-12 sm:p-8">
             <span
               aria-hidden="true"
               className="pointer-events-none absolute right-0 top-0 h-1/2 w-1/2 rounded-tr-3xl border-r border-t border-white/10"
@@ -274,24 +251,19 @@ const ViewStore = ({
                 </button>
               </div>
             ) : (
-              <div className="grid gap-3 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-2">
                 {passwordArray.map((item) => {
                   const isPasswordVisible = visiblePasswordIds.includes(
                     item._id,
                   );
-                  const colorIdx =
-                    [...item._id].reduce(
-                      (sum, char) => sum + char.charCodeAt(0),
-                      0,
-                    ) % cardColors.length;
 
                   return (
                     <article
                       key={item._id}
-                      className={`group rounded-2xl border p-4 transition duration-200 hover:brightness-110 sm:p-5 ${cardColors[colorIdx]}`}
+                      className="vault-password-card group rounded-2xl p-4 sm:p-5"
                     >
-                      <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-300/15 bg-cyan-300/[0.07] text-sm font-bold uppercase text-cyan-100">
+                      <div className="flex min-w-0 items-center gap-3.5">
+                        <div className="vault-password-card__site-mark flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-sm font-bold uppercase">
                           {item.site?.replace(/^https?:\/\//i, "")?.[0] || "S"}
                         </div>
                         <div className="min-w-0 flex-1">
@@ -303,12 +275,12 @@ const ViewStore = ({
                             }
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block truncate text-sm font-semibold text-slate-100 transition hover:text-cyan-200"
+                            className="block truncate text-base font-semibold text-slate-100 transition hover:text-cyan-200"
                           >
                             {item.site}
                           </a>
-                          <p className="mt-1 truncate text-xs text-slate-500">
-                            Saved login
+                          <p className="mt-1 text-xs text-slate-400">
+                            Login details
                           </p>
                         </div>
                         <button
@@ -316,7 +288,7 @@ const ViewStore = ({
                           onClick={() => copyText(item.site)}
                           aria-label={`Copy website ${item.site}`}
                           title="Copy website"
-                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.07] bg-white/3 transition hover:border-cyan-300/20 hover:bg-cyan-300/10"
+                          className="vault-icon-button flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                         >
                           <img
                             src={copy_img}
@@ -326,13 +298,13 @@ const ViewStore = ({
                         </button>
                       </div>
 
-                      <div className="mt-5 grid gap-4 border-t border-white/[0.07] pt-4 sm:grid-cols-2">
-                        <div className="min-w-0">
-                          <p className="text-[10px] font-semibold tracking-[0.14em] text-slate-500 uppercase">
+                      <div className="vault-password-card__details mt-5 grid gap-3 border-t border-white/8 pt-4">
+                        <div className="vault-password-card__detail min-w-0 rounded-xl px-3.5 py-3">
+                          <p className="text-[10px] font-semibold tracking-[0.14em] text-slate-400 uppercase">
                             Username
                           </p>
-                          <div className="mt-1 flex items-center gap-2">
-                            <p className="min-w-0 flex-1 truncate text-sm text-slate-300">
+                          <div className="mt-2 flex items-center gap-2">
+                            <p className="min-w-0 flex-1 truncate text-sm text-slate-100">
                               {item.username}
                             </p>
                             <button
@@ -340,7 +312,7 @@ const ViewStore = ({
                               onClick={() => copyText(item.username)}
                               aria-label={`Copy username for ${item.site}`}
                               title="Copy username"
-                              className="rounded-md p-1 text-slate-500 transition hover:bg-white/6 hover:text-cyan-200"
+                              className="vault-icon-button flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
                             >
                               <img
                                 src={copy_img}
@@ -351,12 +323,12 @@ const ViewStore = ({
                           </div>
                         </div>
 
-                        <div className="min-w-0">
-                          <p className="text-[10px] font-semibold tracking-[0.14em] text-slate-500 uppercase">
+                        <div className="vault-password-card__detail min-w-0 rounded-xl px-3.5 py-3">
+                          <p className="text-[10px] font-semibold tracking-[0.14em] text-slate-400 uppercase">
                             Password
                           </p>
-                          <div className="mt-1 flex items-center gap-2">
-                            <p className="min-w-0 flex-1 truncate font-mono text-sm tracking-[0.12em] text-slate-300">
+                          <div className="mt-2 flex items-center gap-2">
+                            <p className="min-w-0 flex-1 truncate font-mono text-sm tracking-[0.08em] text-slate-100">
                               {isPasswordVisible
                                 ? item.password
                                 : "••••••••••••"}
@@ -374,7 +346,7 @@ const ViewStore = ({
                                   ? "Hide password"
                                   : "Show password"
                               }
-                              className="rounded-md p-1 text-slate-500 transition hover:bg-white/6 hover:text-cyan-200"
+                              className="vault-icon-button flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
                             >
                               <img
                                 src={isPasswordVisible ? eyeCross : eye}
@@ -387,7 +359,7 @@ const ViewStore = ({
                               onClick={() => copyText(item.password)}
                               aria-label={`Copy password for ${item.site}`}
                               title="Copy password"
-                              className="rounded-md p-1 text-slate-500 transition hover:bg-white/6 hover:text-cyan-200"
+                              className="vault-icon-button flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
                             >
                               <img
                                 src={copy_img}
@@ -399,12 +371,12 @@ const ViewStore = ({
                         </div>
                       </div>
 
-                      <div className="mt-4 flex justify-end gap-2 border-t border-white/[0.07] pt-3">
+                      <div className="mt-4 flex justify-end gap-2 border-t border-white/8 pt-3">
                         <button
                           type="button"
                           onClick={(e) => editPassword(e, item._id)}
                           aria-label={`Edit password for ${item.site}`}
-                          className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-400 transition hover:bg-white/6 hover:text-white"
+                          className="vault-action-button inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium"
                         >
                           <img
                             src={edit_img}
@@ -417,7 +389,7 @@ const ViewStore = ({
                           type="button"
                           onClick={(e) => deletePassword(e, item._id)}
                           aria-label={`Delete password for ${item.site}`}
-                          className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-slate-400 transition hover:bg-rose-400/10 hover:text-rose-200"
+                          className="vault-action-button vault-action-button--delete inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium"
                         >
                           <img
                             src={delete_img}

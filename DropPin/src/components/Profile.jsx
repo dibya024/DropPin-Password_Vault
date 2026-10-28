@@ -30,15 +30,22 @@ const Profile = ({
 
   const [otp, setotp] = useState("");
   const [otpSent, setotpSent] = useState(false);
+
   const [verificationLoading, setverificationLoading] = useState(false);
   const [verificationMessage, setverificationMessage] = useState("");
   const [verificationPopupOpen, setverificationPopupOpen] = useState(false);
   const [verificationError, setverificationError] = useState("");
 
+  const [usernameChangeStep, setusernameChangeStep] = useState("view");
+  const [usernameDreft, setusernameDreft] = useState(currentUser?.username ?? "");
+  const [usernameOtp, setusernameOtp] = useState("");
+  const [usernameChangeLoading, setusernameChangeLoading] = useState(false);
+  const [usernameChangeError, setusernameChangeError] = useState("");
+
   // const emailVerified = false;
   const emailVerified = currentUser?.emailVerified ?? false;
 
-  const editUsername = (e, id) => {};
+  const editUsername = () => {};
 
   const handleEmailVerification = async () => {
     setverificationLoading(true);
@@ -95,7 +102,7 @@ const Profile = ({
       setLogoutPending(false);
     }
   };
-  
+
   // const handleLogout = () => {
   //   onLogout();
   //   setLogoutPopupOpen(false);
@@ -113,7 +120,7 @@ const Profile = ({
             role="dialog"
             aria-modal="true"
             aria-label="Confirm logout"
-            className="rounded-2xl border border-white/10 bg-[#101326] p-5 shadow-2xl"
+            className="profile-dialog rounded-2xl border border-white/10 bg-[#101326] p-5 shadow-2xl"
             onClick={(event) => event.stopPropagation()}
           >
             <p className="text-sm font-semibold text-white">
@@ -160,7 +167,7 @@ const Profile = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="verify-email-dialog-title"
-            className="w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-white/10 bg-[#101326] p-5 shadow-2xl"
+            className="profile-dialog w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-white/10 bg-[#101326] p-5 shadow-2xl"
             onClick={(event) => event.stopPropagation()}
           >
             <p
@@ -273,34 +280,6 @@ const Profile = ({
               <div className="profile-field">
                 <div className="profile-field__copy">
                   <label
-                    htmlFor="profile-username"
-                    className="profile-field__label"
-                  >
-                    Username
-                  </label>
-                  <span className="profile-field__hint">
-                    Your name in DropPin
-                  </span>
-                </div>
-                <input
-                  type="text"
-                  id="profile-username"
-                  name="username"
-                  className="profile-field__input"
-                  placeholder="Enter a username"
-                />
-                <button
-                  type="button"
-                  className="profile-inline-action hover:underline"
-                  onClick={editUsername}
-                >
-                  Change username
-                </button>
-              </div>
-
-              <div className="profile-field">
-                <div className="profile-field__copy">
-                  <label
                     htmlFor="profile-email"
                     className="profile-field__label"
                   >
@@ -310,9 +289,11 @@ const Profile = ({
                     Used for account access
                   </span>
                 </div>
-                <div className="gap-8 flex content-center">
-                  <div className="inline-flex items-center rounded-lg border border-slate-500/40 bg-slate-900/40 px-35 py-2 text-slate-300">
-                    {currentUser ? currentUser.email : "abc@email.xyz"}
+                <div className="profile-field__value">
+                  <div className="profile-value-pill profile-value-pill--username">
+                    {currentUser
+                      ? currentUser.email
+                      : "3sahoo.dibya2024@email.com"}
                   </div>
                   <div className="inline-flex font-semibold">
                     {emailVerified ? (
@@ -345,6 +326,39 @@ const Profile = ({
               <div className="profile-field">
                 <div className="profile-field__copy">
                   <label
+                    htmlFor="profile-username"
+                    className="profile-field__label"
+                  >
+                    Username
+                  </label>
+                  <span className="profile-field__hint">
+                    Your name in DropPin
+                  </span>
+                </div>
+                <div className="profile-field__value">
+                  <div className="profile-value-pill profile-value-pill--email">
+                    {currentUser ? currentUser.username : "Username"}
+                  </div>
+                  {/* <input
+                  type="text"
+                  id="profile-username"
+                  name="username"
+                  className="profile-field__input"
+                  placeholder="Enter a username"
+                /> */}
+                  <button
+                    type="button"
+                    className="profile-inline-action hover:underline"
+                    onClick={editUsername}
+                  >
+                    Change username
+                  </button>
+                </div>
+              </div>
+
+              <div className="profile-field">
+                <div className="profile-field__copy">
+                  <label
                     htmlFor="profile-sites"
                     className="profile-field__label"
                   >
@@ -354,8 +368,8 @@ const Profile = ({
                     Websites saved in your vault
                   </span>
                 </div>
-                <div className="gap-8 flex content-center">
-                  <div className="inline-flex items-center rounded-lg border border-slate-500/40 bg-slate-900/40 px-15 py-2 text-slate-300">
+                <div className="profile-field__value">
+                  <div className="profile-value-pill">
                     {passwordArray.length}
                   </div>
                   <div className="inline-flex font-semibold">

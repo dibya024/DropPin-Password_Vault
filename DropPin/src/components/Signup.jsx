@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import "../../CSS/Auth.css";
 import "../../CSS/Signup.css";
 
 import { useNavigate, Link } from "react-router-dom";
@@ -68,115 +69,21 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-page">
+    <div className="signup-page signup-page--simple">
       <div className="signup-orb signup-orb--cyan" aria-hidden="true" />
       <div className="signup-orb signup-orb--violet" aria-hidden="true" />
 
       <main className="signup-layout">
-        <section className="signup-showcase" aria-label="About DropPin">
-          <div className="signup-showcase__eyebrow">
-            <span className="signup-showcase__status" />
-            YOUR PERSONAL PASSWORD VAULT
-          </div>
-
-          <h1 className="signup-showcase__title">
-            Your digital life,
-            <br />
-            <span>under lock</span>
-            <span className="signup-showcase__period">.</span>
-          </h1>
-          <p className="signup-showcase__description">
-            One calm, secure place for the passwords that keep your world
-            moving.
-          </p>
-
-          <div className="signup-vault-card" aria-hidden="true">
-            <div className="signup-vault-card__top">
-              <span className="signup-vault-card__brand">
-                <svg viewBox="0 0 24 24" fill="none">
-                  <path
-                    d="M12 3 5 6v5c0 4.5 2.8 8.1 7 10 4.2-1.9 7-5.5 7-10V6l-7-3Z"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                  />
-                  <path
-                    d="m9 12 2 2 4-4"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                DropPin vault
-              </span>
-              <span className="signup-vault-card__secure">ENCRYPTED</span>
-            </div>
-            <div className="signup-vault-card__item">
-              <span className="signup-vault-card__icon">N</span>
-              <span>
-                <strong>Everyday accounts</strong>
-                <small>Protected and ready</small>
-              </span>
-              <span className="signup-vault-card__dots">••••••</span>
-            </div>
-            <div className="signup-vault-card__item signup-vault-card__item--muted">
-              <span className="signup-vault-card__icon">✦</span>
-              <span>
-                <strong>Peace of mind</strong>
-                <small>All in one place</small>
-              </span>
-              <span className="signup-vault-card__check">✓</span>
-            </div>
-          </div>
-
-          <p className="signup-showcase__footnote">
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <path
-                d="M10 2.5 4 5v4.2c0 3.8 2.4 6.8 6 8.3 3.6-1.5 6-4.5 6-8.3V5l-6-2.5Z"
-                stroke="currentColor"
-                strokeWidth="1.4"
-              />
-              <path
-                d="m7.5 9.8 1.7 1.7 3.4-3.6"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Built for a more secure everyday
-          </p>
-        </section>
-
-        <section className="signup-card" aria-labelledby="signup-title">
+        <p className="signup-intro">
+          Your passwords, all locked in. Nice and simple.
+        </p>
+        <section
+          className="signup-card signup-card--simple"
+          aria-labelledby="signup-title"
+        >
           <div className="signup-card__accent" />
           <div className="signup-card__heading">
-            <div className="signup-card__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <rect
-                  x="4"
-                  y="10"
-                  width="16"
-                  height="11"
-                  rx="2.5"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-                <path
-                  d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <div>
-              <p className="signup-card__kicker">GET STARTED</p>
-              <h2 id="signup-title">Create your account</h2>
-              <p className="signup-card__subtitle">
-                Your passwords deserve a better home.
-              </p>
-            </div>
+            <h2 id="signup-title">Create account</h2>
           </div>
 
           <form className="signup-form" onSubmit={handleSubmit}>
@@ -269,23 +176,6 @@ const Signup = () => {
 
           <p className="signup-card__login">
             Already have an account? <Link to="/login">Log in</Link>
-          </p>
-          <p className="signup-card__privacy">
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M8 1.8 3 4v3.5c0 3.1 2 5.6 5 6.8 3-1.2 5-3.7 5-6.8V4L8 1.8Z"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-              <path
-                d="m6 7.8 1.4 1.4 2.8-3"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Your data stays yours. Always.
           </p>
         </section>
       </main>

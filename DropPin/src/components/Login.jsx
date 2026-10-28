@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
 
+import "../../CSS/Auth.css";
 import "../../CSS/Login.css";
 import { loginAccount } from "../api/auth";
 
@@ -32,12 +33,8 @@ const Login = ({ onLogin }) => {
     }
   };
 
-  const handleForgotpassword= () => {
-    
-  }
-
   return (
-    <div className="signup-page">
+    <div className="signup-page login-page">
       <div className="signup-orb signup-orb--cyan" aria-hidden="true" />
       <div className="signup-orb signup-orb--violet" aria-hidden="true" />
 
@@ -63,128 +60,14 @@ const Login = ({ onLogin }) => {
                 />
               </svg>
             </span>
-            <span>YOUR PERSONAL PASSWORD VAULT</span>
-            <span className="login-showcase__eyebrow-line" aria-hidden="true" />
+            <span>DROP PIN</span>
           </div>
 
           <h1 className="login-showcase__title">
-            Everything safe.
-            <br />
-            <span>Everything</span>
+            Your vault,
             <br />
             <span className="login-showcase__title-accent">within reach.</span>
           </h1>
-          <p className="login-showcase__description">
-            Welcome back to a calmer way to manage your digital life.
-          </p>
-
-          <div className="login-vault-preview" aria-hidden="true">
-            <div className="login-vault-preview__glow" aria-hidden="true" />
-            <div className="login-vault-preview__top">
-              <div className="login-vault-preview__brand">
-                <span className="login-vault-preview__brand-icon">
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 3 5 6v5c0 4.5 2.8 8.1 7 10 4.2-1.9 7-5.5 7-10V6l-7-3Z"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                    />
-                    <path
-                      d="m9 12 2 2 4-4"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span>
-                  <strong>Your vault</strong>
-                  <small>Private by design</small>
-                </span>
-              </div>
-              <span className="login-vault-preview__secure">
-                <span />
-                SECURE
-              </span>
-            </div>
-
-            <div className="login-vault-preview__divider" />
-
-            <div className="login-vault-preview__account">
-              <span className="login-vault-preview__service login-vault-preview__service--blue">
-                G
-              </span>
-              <span className="login-vault-preview__account-info">
-                <strong>Google account</strong>
-                <small>Personal</small>
-              </span>
-              <span className="login-vault-preview__dots">••••••••</span>
-              <svg
-                className="login-vault-preview__check"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="m5 10 3.2 3.2L15 6.5"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-
-            <div className="login-vault-preview__account login-vault-preview__account--second">
-              <span className="login-vault-preview__service login-vault-preview__service--violet">
-                N
-              </span>
-              <span className="login-vault-preview__account-info">
-                <strong>Netflix</strong>
-                <small>Entertainment</small>
-              </span>
-              <span className="login-vault-preview__dots">••••••••</span>
-              <svg
-                className="login-vault-preview__check"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="m5 10 3.2 3.2L15 6.5"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <div className="login-showcase__trust">
-            <span className="login-showcase__trust-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none">
-                <path
-                  d="M10 2.5 4 5v4.2c0 3.8 2.4 6.8 6 8.3 3.6-1.5 6-4.5 6-8.3V5l-6-2.5Z"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                />
-                <path
-                  d="m7.5 9.8 1.7 1.7 3.4-3.6"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <span>
-              <strong>A little peace of mind.</strong>
-              <small>Your security always comes first.</small>
-            </span>
-            <span className="login-showcase__trust-sparkle" aria-hidden="true">
-              ✦
-            </span>
-          </div>
         </section>
 
         <section
@@ -213,10 +96,10 @@ const Login = ({ onLogin }) => {
               </svg>
             </div>
             <div>
-              <p className="signup-card__kicker">WELCOME BACK</p>
-              <h2 id="login-title">Sign in to DropPin</h2>
+              <p className="signup-card__kicker">YOUR PERSONAL VAULT</p>
+              <h2 id="login-title">Welcome back</h2>
               <p className="signup-card__subtitle">
-                Enter your details to open your vault.
+                Access your saved logins.
               </p>
             </div>
           </div>
@@ -256,22 +139,19 @@ const Login = ({ onLogin }) => {
               </div>
             </div>
 
-            {/* <label className="login-remember">
-              <input type="checkbox" name="rememberMe" />
-              <span>Remember me on this device</span>
-            </label> */}
-
-            <div className="forgot-password">
+            <div className="login-forgot-password">
               <button
-                onClick={handleForgotpassword}
-                className="cursor-pointer hover:underline hover:text-blue-600"
+                type="button"
+                onClick={() =>
+                  setLoginNotice("Password recovery is not available yet.")
+                }
               >
-                Forgot Password ?
+                Forgot password?
               </button>
             </div>
 
             <button className="signup-submit" type="submit">
-              <span>Unlock my vault</span>
+              <span>Sign in</span>
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path
                   d="M4 10h12m-5-5 5 5-5 5"
@@ -283,7 +163,7 @@ const Login = ({ onLogin }) => {
               </svg>
             </button>
             {loginNotice && (
-              <p className="login-notice" role="status">
+              <p className="login-notice" role="alert">
                 {loginNotice}
               </p>
             )}
@@ -291,23 +171,6 @@ const Login = ({ onLogin }) => {
 
           <p className="signup-card__login">
             New to DropPin? <Link to="/signup">Create an account</Link>
-          </p>
-          <p className="signup-card__privacy">
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path
-                d="M8 1.8 3 4v3.5c0 3.1 2 5.6 5 6.8 3-1.2 5-3.7 5-6.8V4L8 1.8Z"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-              <path
-                d="m6 7.8 1.4 1.4 2.8-3"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Your data stays yours. Always.
           </p>
         </section>
       </main>

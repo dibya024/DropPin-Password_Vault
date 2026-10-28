@@ -101,7 +101,7 @@ const Manager = ({
 
         <main className="relative mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
           <header className="home-header mb-10 text-center sm:mb-14">
-            <div className="home-header__badge mb-3 inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-400/5 px-4 py-1.5 text-xs font-medium tracking-[0.2em] text-violet-200 uppercase">
+            <div className="home-header__badge mb-3 inline-flex items-center gap-2 rounded-full border border-slate-300/15 bg-slate-400/5 px-4 py-1.5 text-xs font-medium tracking-[0.2em] text-slate-200 uppercase">
               <span aria-hidden="true" className="home-header__status-dot" />
               Your personal vault
             </div>
@@ -127,9 +127,9 @@ const Manager = ({
             />
           </header>
 
-          <section className="rounded-3xl bg-white/5 p-5 border border-white/30 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-8">
+          <section className="home-glass-panel rounded-3xl p-5 sm:p-8">
             <div className="mb-7 flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-violet-400/20 bg-linear-to-br from-violet-500/20 to-cyan-400/10">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-slate-300/15 bg-linear-to-br from-slate-400/15 to-cyan-400/10">
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
