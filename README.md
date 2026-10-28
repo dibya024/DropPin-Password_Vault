@@ -1,145 +1,172 @@
-# Password Manager (DropPin)
+# 🔐 DropPin — Password Manager
 
-DropPin is a password manager with a React frontend and an Express/MongoDB backend. Users can register, sign in with a server-side session, verify their email, and manage password entries stored for their account. Vault passwords are encrypted at rest with AES-256-GCM; account passwords are hashed with bcrypt.
+DropPin is a password manager web application built with React, Vite, Express, Node and MongoDB. Users can register and sign in, and manage password entries scoped to their account.
 
-## Features
+## ✨ Features
 
-- Account registration and login using email or username
-- MongoDB-backed sessions and protected API routes
-- Email verification with expiring, attempt-limited one-time codes
-- Create, view, edit, and delete password entries
-- Per-user ownership checks for vault entries
-- AES-256-GCM encryption for saved vault passwords
+- 🔑 **Password Management** — Add and manage your saved credentials.
+- 👁️ **Show/Hide Passwords** — Toggle password visibility.
+- 📋 **Easy Access** — View and organize your saved entries.
+- 🧾 **Account authentication** — Register, sign in, check the current session, and sign out.
+- 🔐 **Protected vault** — Password-entry endpoints require a session and enforce per-user ownership.
+- 🔒 **Encrypted storage** — Vault passwords are encrypted at rest with AES-256-GCM.
+- 🎨 **Clean UI** — A simple, responsive interface.
+- ⚡ **Fast Performance** — Powered by React and Vite.
 
-## Requirements
+## 🛠️ Tech Stack
 
-- Node.js and npm
-- MongoDB connection string (local MongoDB or MongoDB Atlas)
-- A Resend account and API key to send verification emails
+- **React** — Component-based user interface
+- **Vite** — Development server and build tool
+- **JavaScript (ES6+)** — Application logic
+- **TailwindCSS** — Styling
+- **ESLint** — Code quality and linting
+- **Express and MongoDB** — Backend API and data storage
+- **Mongoose** — MongoDB object modeling
+- **bcryptjs** — Hashing account passwords during registration
+- **Node.js crypto** — AES-256-GCM encryption for saved vault passwords
 
-## Setup
+## 🚀 Getting Started
 
-### 1. Configure the backend
+### Prerequisites
 
-In PowerShell, from the repository root:
+Make sure you have installed:
 
-```powershell
-Set-Location .\backend
-npm install
-```
+- [Node.js](https://nodejs.org/)
+- npm (included with Node.js)
+- [Git](https://git-scm.com/)
 
-Create `backend/.env` with these settings:
+### Installation
 
-```env
-MONGO_URI=your_mongodb_connection_string
-SESSION_SECRET=replace_with_a_long_random_secret
-VAULT_ENCRYPTION_KEY=your_base64_encoded_32_byte_key
-OTP_HASH_SECRET=replace_with_another_long_random_secret
-RESEND_API_KEY=re_your_resend_api_key
-EMAIL_FROM=DropPin <onboarding@resend.dev>
-FRONTEND_URL=http://localhost:5173
-PORT=3000
-NODE_ENV=development
-```
+1. Clone the repository:
 
-The Resend test sender `onboarding@resend.dev` is suitable for development, subject to Resend's current test-sending restrictions. For production, verify a domain with Resend and use a sender address on that domain.
+   ```bash
+   git clone https://github.com/dibya024/Password-Manager.git
+   ```
 
-Generate the vault encryption key once:
+2. Navigate to the project directory:
 
-```powershell
-node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"
-```
+   ```bash
+   cd Password-Manager
+   ```
 
-Use the generated value for `VAULT_ENCRYPTION_KEY`. Keep it private, back it up securely, and do not rotate or lose it without first migrating the encrypted vault data; otherwise, existing saved passwords cannot be decrypted. Keep `.env` out of version control.
+3. Install frontend dependencies:
 
-Start the backend from the `backend` directory:
+   ```bash
+   cd DropPin
+   npm install
+   ```
 
-```powershell
-npm run dev
-```
+4. In a separate terminal, configure and start the backend from the repository root:
 
-The backend listens on port `3000` by default.
+   ```bash
+   cd backend
+   npm install
+   ```
 
-### 2. Configure and run the frontend
+   Create a `backend/.env` file with your MongoDB connection string, session secret, and vault encryption key:
 
-Open another PowerShell terminal from the repository root:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   SESSION_SECRET=your_long_random_session_secret
+   VAULT_ENCRYPTION_KEY=your_base64_encoded_32_byte_key
+   PORT=3000
+   ```
 
-```powershell
-Set-Location .\DropPin
-npm install
-```
+   Generate `VAULT_ENCRYPTION_KEY` once with `node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"` from the backend directory. Keep this key backed up securely and unchanged: losing or rotating it without re-encrypting the vault makes encrypted passwords unreadable. Keep `.env` private and never commit credentials. Passwords belonging to a signed-in user are encrypted with AES-256-GCM at rest. Owned legacy plaintext entries are encrypted when first fetched; records without a confirmed `userId` are neither returned nor migrated automatically.
 
-The frontend defaults to `http://localhost:3000` for its API. If your backend uses a different address, create `DropPin/.env`:
+   For deployment, configure `MONGO_URI`, `SESSION_SECRET`, `VAULT_ENCRYPTION_KEY`, and `PORT` as backend environment variables in the hosting provider. Configure the frontend's `VITE_API_URL` to the deployed backend origin, and update the backend CORS origin in `server.js` to the deployed frontend origin. Use HTTPS in production so session cookies and API traffic are protected in transit. Never commit or expose the encryption key.
 
-```env
-VITE_API_URL=http://localhost:3000
-```
+   Start the backend:
 
-Start the frontend:
+   ```bash
+   npm run dev
+   ```
 
-```powershell
-npm run dev
-```
+5. In a second terminal, start the frontend from the `DropPin` directory:
 
-Open the Vite URL shown in the terminal, usually `http://localhost:5173`.
+   ```bash
+   cd DropPin
+   npm run dev
+   ```
 
-For local development, use `NODE_ENV=development` and use the same hostname consistently (for example, `localhost`) for the frontend and backend. In production, configure the frontend and backend origins, use HTTPS, and set the backend cookie/CORS settings appropriately.
+6. Open the local frontend URL, usually `http://localhost:5173/`.
 
-## Available scripts
+The frontend expects the API at `http://localhost:3000` by default. Set `VITE_API_URL` in the frontend environment if the backend is running at a different origin. Rebuild/redeploy the frontend after changing this Vite environment variable.
 
-Run frontend scripts from `DropPin`:
+## 🔌 Backend API
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the Vite development server |
-| `npm run build` | Build the frontend for production |
-| `npm run preview` | Preview the production build |
-| `npm run lint` | Run ESLint |
+The backend listens on port `3000` by default. Current endpoints are:
 
-Run backend scripts from `backend`:
-
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the backend with nodemon |
-| `npm start` | Start the backend |
-
-## API routes
-
-| Method | Path | Purpose |
-| --- | --- | --- |
-| `POST` | `/api/auth/register` | Register an account |
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/passwords` | Fetch saved password entries |
+| `POST` | `/api/passwords` | Create a password entry |
+| `PUT` | `/api/passwords/:id` | Update a password entry |
+| `DELETE` | `/api/passwords/:id` | Delete a password entry |
+| `POST` | `/api/auth/register` | Register an account using email and password |
 | `POST` | `/api/auth/login` | Sign in and create a session |
-| `GET` | `/api/auth/me` | Return the signed-in user |
-| `POST` | `/api/auth/logout` | Destroy the current session |
-| `POST` | `/api/auth/email-verification/request` | Send a verification code |
-| `POST` | `/api/auth/email-verification/verify` | Verify an email code |
-| `GET` | `/api/passwords` | List the signed-in user's vault entries |
-| `POST` | `/api/passwords` | Add a vault entry |
-| `PUT` | `/api/passwords/:id` | Update a vault entry |
-| `DELETE` | `/api/passwords/:id` | Delete a vault entry |
+| `GET` | `/api/auth/me` | Check the current session |
+| `POST` | `/api/auth/logout` | End the current session |
 
-Authentication uses an HTTP-only session cookie. The frontend sends credentials with API requests; the backend CORS origin must match the frontend origin.
+Password endpoints require an authenticated session and limit every read, create, update, and delete operation to the current user's entries. Registration requires a valid email and a password of at least 8 characters. Account passwords are hashed with bcrypt before storage; saved vault passwords are encrypted with AES-256-GCM and decrypted only when returned to the authenticated user.
 
-## Repository layout
+## 📁 Project Structure
 
 ```text
-.
+Password-Manager/
 ├── backend/
 │   ├── models/
+│   │   ├── Document.js
+│   │   └── User.js
 │   ├── routes/
+│   │   ├── authRouter.js
+│   │   └── passwordRouter.js
 │   ├── utils/
+│   │   └── passwordEncryption.js
 │   ├── server.js
 │   └── package.json
 └── DropPin/
-    ├── CSS/
     ├── public/
     ├── src/
     │   ├── api/
-    │   └── components/
+    │   ├── components/
+    │   ├── App.jsx
+    │   └── main.jsx
     ├── package.json
     └── vite.config.js
 ```
 
-## Security
+## 🧑‍💻 Available Scripts
 
-This project is not a substitute for an independent security review. Do not commit `.env` files, API keys, session secrets, encryption keys, or real credentials. Use HTTPS in production and protect backups of `VAULT_ENCRYPTION_KEY`; database access together with that key can expose stored vault passwords.
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Build the application for production |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | Run ESLint checks |
+
+## 🔒 Security Notes
+
+This project is intended for learning and development. Authentication and per-user authorization are implemented, and vault password fields are encrypted at rest; however, this does not constitute an independent security review or guarantee the application is safe for production use.
+
+Protect `VAULT_ENCRYPTION_KEY` as a critical secret. Anyone with access to both the database and this key can decrypt the vault. Keep secure backups of the key, use HTTPS in production, and review the hosting provider's session and cookie settings before deployment. Legacy records without an owner are intentionally not assigned to an account automatically.
+
+Never commit API keys, encryption keys, `.env` files, or real user credentials to GitHub.
+
+## 🗺️ Future Improvements
+
+- [ ] Implement password generation.
+- [ ] Add search and filtering.
+- [ ] Add copy-to-clipboard functionality.
+- [ ] Improve mobile responsiveness.
+- [ ] Add secure vault-key backup and recovery workflows.
+
+## 👨‍💻 Author
+
+**Dibyaranjan Sahoo**
+
+- GitHub: [@dibya024](https://github.com/dibya024)
+
+## 📄 License
+
+This project is currently available for learning and personal development. Add a license file if you intend to specify formal permissions for reuse and distribution.
